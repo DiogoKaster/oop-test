@@ -1,48 +1,55 @@
+import cargos.Cargo;
+import cargos.Gerente;
+import cargos.Secretario;
+import cargos.Vendedor;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
+import java.text.Normalizer;
 
 public class Main {
     public static void main(String[] args) {
         Repository repositorio = new Repository();
 
-        JsonArray cargos = repositorio.getCargos();
         JsonArray funcionarios = repositorio.getFuncionarios();
         JsonArray vendas = repositorio.getVendas();
 
-        for (int i = 0; i < cargos.size(); i++) {
-            JsonObject cargo = cargos.get(i).getAsJsonObject();
+        Cargo[] cargos = {
+                new Secretario(),
+                new Vendedor(),
+                new Gerente()
+        };
 
-            String nomeCargo = cargo.get("cargo").getAsString();
-            double salarioBase = cargo.get("salario_base").getAsDouble();
-            double beneficioAnual = cargo.get("beneficio_anual").getAsDouble();
-
-            System.out.println("Cargo: " + nomeCargo);
-            System.out.println("Salário Base: " + salarioBase);
-            System.out.println("Benefício Anual: " + beneficioAnual);
-            System.out.println();
-        }
         for (int i = 0; i < funcionarios.size(); i++) {
             JsonObject funcionario = funcionarios.get(i).getAsJsonObject();
 
             String nomeFuncionario = funcionario.get("nome").getAsString();
-            String cargoFuncionario = funcionario.get("cargo").getAsString();
+            String cargoFuncionario = Normalizer.normalize(funcionario.get("cargo").getAsString(), Normalizer.Form.NFD)
+                    .replaceAll("[^\\p{ASCII}]", "")
+                    .toLowerCase();
             String contratacao = funcionario.get("contratacao").getAsString();
 
-            System.out.println("Nome: " + nomeFuncionario);
-            System.out.println("Cargo: " + cargoFuncionario);
-            System.out.println("Contratacao: " + contratacao);
-            System.out.println();
-        }
-        for (int i = 0; i < vendas.size(); i++) {
-            JsonObject venda = vendas.get(i).getAsJsonObject();
+            Cargo cargo = null;
 
-            String nomeVenda = venda.get("nome").getAsString();
-            String cargoVendas = venda.get("cargo").getAsString();
-            JsonObject vendasPorMes = venda.get("vendas_por_mes").getAsJsonObject();
+            switch (cargoFuncionario) {
+                case "secretario":
+                    cargo = new Secretario();
+                    break;
+                case "vendedor":
+                    cargo = new Vendedor();
+                    break;
+                case "gerente":
+                    cargo = new Gerente();
+                    break;
+                default:
+                    break;
+            }
 
-            System.out.println("Nome: " + nomeVenda);
-            System.out.println("Cargo: " + cargoVendas);
-            System.out.println("Vendas por mes: " + vendasPorMes);
+            Funcionario funcionarioInstancia = new Funcionario(nomeFuncionario, cargo, contratacao);
+
+            System.out.println("Nome: " + funcionarioInstancia.getNome());
+            System.out.println("Cargo: " + funcionarioInstancia.getCargo());
+            System.out.println("Contratacao: " + funcionarioInstancia.getInicioContrato());
             System.out.println();
         }
     }
