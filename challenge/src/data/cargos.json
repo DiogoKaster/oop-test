@@ -1,0 +1,21 @@
+{
+  "cargos": [
+    {
+      "cargo": "Secretário",
+      "salario_base": 7000.00,
+      "beneficio_anual": 1000.00,
+      "porcentagem_salario": 20
+    },
+    {
+      "cargo": "Vendedor",
+      "salario_base": 12000.00,
+      "beneficio_anual": 1800.00,
+      "porcentagem_vendas": 30
+    },
+    {
+      "cargo": "Gerente",
+      "salario_base": 20000.00,
+      "beneficio_anual": 3000.00
+    }
+  ]
+}

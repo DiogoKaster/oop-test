@@ -1,0 +1,47 @@
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Objects;
+
+public class Repository {
+    private JsonObject cargos;
+    private JsonObject funcionarios;
+    private JsonObject vendas;
+
+    public Repository() {
+        Gson gson = new Gson();
+        Path path = Paths.get("data/cargos.json");
+        try {
+            InputStreamReader cargoData = new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/data/cargos.json")));
+            cargos = gson.fromJson(cargoData, JsonObject.class);
+            cargoData.close();
+
+            InputStreamReader funcionariosData = new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/data/funcionarios.json")));
+            funcionarios = gson.fromJson(funcionariosData, JsonObject.class);
+            funcionariosData.close();
+
+            InputStreamReader vendasData = new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/data/vendas.json")));
+            vendas = gson.fromJson(vendasData, JsonObject.class);
+            vendasData.close();
+
+        } catch (IOException error) {
+            System.out.println("Error: " + error.getMessage());
+        }
+    }
+    public JsonArray getCargos() {
+        return cargos.getAsJsonArray("cargos");
+    }
+
+    public JsonArray getFuncionarios() {
+        return funcionarios.getAsJsonArray("funcionarios");
+    }
+
+    public JsonArray getVendas() {
+        return vendas.getAsJsonArray("vendas");
+    }
+}

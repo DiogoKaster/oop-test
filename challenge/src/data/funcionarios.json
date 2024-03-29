@@ -1,0 +1,34 @@
+{
+  "funcionarios": [
+    {
+      "nome": "Jorge Carvalho",
+      "cargo": "Secretário",
+      "contratacao": "01/2018"
+    },
+    {
+      "nome": "Maria Souza",
+      "cargo": "Secretário",
+      "contratacao": "12/2015"
+    },
+    {
+      "nome": "Ana Silva",
+      "cargo": "Vendedor",
+      "contratacao": "12/2021"
+    },
+    {
+      "nome": "João Mendes",
+      "cargo": "Vendedor",
+      "contratacao": "12/2021"
+    },
+    {
+      "nome": "Juliana Alves",
+      "cargo": "Gerente",
+      "contratacao": "07/2017"
+    },
+    {
+      "nome": "Bento Albino",
+      "cargo": "Gerente",
+      "contratacao": "03/2014"
+    }
+  ]
+}
