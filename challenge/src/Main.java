@@ -10,12 +10,13 @@ public class Main {
 
         Empresa empresa = new Empresa(dataFuncionarios);
 
-        double[] valorTotal;
-
-        valorTotal = empresa.calcularValorPago(LocalDate.of(2019, 5, 1));
+        double[] valorTotal = empresa.calcularValorPagoSemBeneficios(LocalDate.of(2020, 1, 1));
+        double valorTotalEmBeneficios = empresa.calcularValorTotalEmBeneficios(LocalDate.of(2020, 1, 1), dataVendas);
 
         for(double valor : valorTotal) {
             System.out.println(valor);
         }
+
+        System.out.println(valorTotalEmBeneficios);
     }
 }

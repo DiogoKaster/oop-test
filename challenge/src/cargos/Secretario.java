@@ -1,11 +1,15 @@
 package cargos;
 
+import java.time.LocalDate;
+import java.time.Period;
+
 public class Secretario extends Cargo{
     public Secretario() {
-        super(7000, 1000);
+        super(7000, 1000, 0.20);
     }
-    public double calcularBeneficio(int anosServico) {
-        return 0.20 * super.salario;
+
+    public double getBonificacao() {
+        return this.bonificacao;
     }
 
     @Override

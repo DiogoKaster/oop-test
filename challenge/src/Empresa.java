@@ -6,7 +6,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
 public class Empresa {
@@ -31,36 +30,46 @@ public class Empresa {
         }
     }
 
-    public double[] calcularValorPago(LocalDate date) {
+    public double[] calcularValorPagoComBeneficios(LocalDate date, JsonArray vendas) {
         double[] totalPago = new double[this.funcionarios.length];
 
         for(int i = 0; i < this.funcionarios.length; i++) {
             Funcionario funcionario = this.funcionarios[i];
 
-            if (date.isAfter(funcionario.getInicioContrato())) {
-                Period periodo = Period.between(funcionario.getInicioContrato(), date);
-                int anosTrabalhados = periodo.getYears();
+            totalPago[i] = funcionario.getSalarioRecebido(date);
 
-                totalPago[i] = getSalarioRecebido(anosTrabalhados, periodo, funcionario);
+            if(funcionario.cargo() instanceof Secretario) {
+                totalPago[i] += totalPago[i] * ((Secretario) funcionario.cargo()).getBonificacao();
+            } else if (funcionario.cargo() instanceof Vendedor) {
+                totalPago[i] += ((Vendedor) funcionario.cargo()).getBonificacaoEmVendas(vendas, funcionario.nome(), date);
             }
         }
         return totalPago;
     }
 
-    private static double getSalarioRecebido(int anosTrabalhados, Period periodo, Funcionario funcionario) {
-        int mesesTrabalhados = anosTrabalhados * 12 + periodo.getMonths();
-        int mesesTrabalhadosComBonus = mesesTrabalhados - 12;
+    public double[] calcularValorPagoSemBeneficios(LocalDate date) {
+        double[] totalPago = new double[this.funcionarios.length];
 
-        double bonusAnual = funcionario.getCargo().getBonusPorAno();
-        double salarioBase = funcionario.getCargo().getSalario();
-        double salarioRecebido = (salarioBase * mesesTrabalhados) + (mesesTrabalhadosComBonus * bonusAnual);
+        for(int i = 0; i < this.funcionarios.length; i++) {
+            Funcionario funcionario = this.funcionarios[i];
 
-        while (mesesTrabalhadosComBonus > 0) {
-            mesesTrabalhadosComBonus -= 12;
-            if(mesesTrabalhadosComBonus > 0){
-                salarioRecebido += mesesTrabalhadosComBonus * bonusAnual;
-        }}
-        return salarioRecebido;
+            totalPago[i] = funcionario.getSalarioRecebido(date);
+        }
+        return totalPago;
+    }
+
+    public double calcularValorTotalEmBeneficios(LocalDate date, JsonArray vendas) {
+        double totalPago = 0;
+
+        for (Funcionario funcionario : this.funcionarios) {
+            if (funcionario.cargo() instanceof Secretario) {
+                double salarioFuncionario = funcionario.getSalarioRecebido(date);
+                totalPago += salarioFuncionario * ((Secretario) funcionario.cargo()).getBonificacao();
+            } else if (funcionario.cargo() instanceof Vendedor) {
+                totalPago += ((Vendedor) funcionario.cargo()).getBonificacaoEmVendas(vendas, funcionario.nome(), date);
+            }
+        }
+        return totalPago;
     }
 
     private static Funcionario getFuncionario(String cargoFuncionario, String nomeFuncionario, String contratacao) {
@@ -92,9 +101,9 @@ public class Empresa {
 
     public void printaFuncionarios() {
         for(Funcionario funcionario : this.funcionarios) {
-            System.out.println("Nome: " + funcionario.getNome());
-            System.out.println("Cargo: " + funcionario.getCargo());
-            System.out.println("Contratacao: " + funcionario.getInicioContrato());
+            System.out.println("Nome: " + funcionario.nome());
+            System.out.println("Cargo: " + funcionario.cargo());
+            System.out.println("Contratacao: " + funcionario.inicioContrato());
             System.out.println();
         }
     }

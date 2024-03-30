@@ -3,14 +3,12 @@ package cargos;
 public class Cargo {
     protected double salario;
     protected double bonusPorAno;
+    protected double bonificacao;
 
-    public Cargo (double salario, double bonusPorAno) {
+    public Cargo (double salario, double bonusPorAno, double bonificacao) {
         this.salario = salario;
         this.bonusPorAno = bonusPorAno;
-    }
-
-    public void calculoBonusPorAno(int anos) {
-        this.salario += this.bonusPorAno * anos;
+        this.bonificacao = bonificacao;
     }
 
     public double getSalario() {
@@ -20,4 +18,6 @@ public class Cargo {
     public double getBonusPorAno() {
         return bonusPorAno;
     }
+
+
 }
