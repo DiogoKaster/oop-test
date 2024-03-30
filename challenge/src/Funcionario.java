@@ -1,11 +1,13 @@
 import cargos.Cargo;
 
+import java.time.LocalDate;
+
 public class Funcionario {
     private String nome;
     private Cargo cargo;
-    private String inicioContrato;
+    private LocalDate inicioContrato;
 
-    public Funcionario(String nome, Cargo cargo, String inicioContrato) {
+    public Funcionario(String nome, Cargo cargo, LocalDate inicioContrato) {
         this.nome = nome;
         this.cargo = cargo;
         this.inicioContrato = inicioContrato;
@@ -19,7 +21,7 @@ public class Funcionario {
         return cargo;
     }
 
-    public String getInicioContrato() {
+    public LocalDate getInicioContrato() {
         return inicioContrato;
     }
 }

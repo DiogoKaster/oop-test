@@ -6,6 +6,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.text.Normalizer;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class Empresa {
     private final Funcionario[] funcionarios;
@@ -18,9 +23,7 @@ public class Empresa {
                 JsonObject funcionario = funcionariosJson.get(i).getAsJsonObject();
 
                 String nomeFuncionario = funcionario.get("nome").getAsString();
-                String cargoFuncionario = Normalizer.normalize(funcionario.get("cargo").getAsString(), Normalizer.Form.NFD)
-                        .replaceAll("[^\\p{ASCII}]", "")
-                        .toLowerCase();
+                String cargoFuncionario = funcionario.get("cargo").getAsString().toLowerCase();
                 String contratacao = funcionario.get("contratacao").getAsString();
 
                 Funcionario funcionarioInstancia = getFuncionario(cargoFuncionario, nomeFuncionario, contratacao);
@@ -34,8 +37,11 @@ public class Empresa {
     private static Funcionario getFuncionario(String cargoFuncionario, String nomeFuncionario, String contratacao) {
         Cargo cargo = null;
 
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+        LocalDate dateContratacao = LocalDate.parse("01/" + contratacao, formatter);
+
         switch (cargoFuncionario) {
-            case "secretario":
+            case "secretário":
                 cargo = new Secretario();
                 break;
             case "vendedor":
@@ -48,7 +54,11 @@ public class Empresa {
                 break;
         }
 
-        return new Funcionario(nomeFuncionario, cargo, contratacao);
+        return new Funcionario(nomeFuncionario, cargo, dateContratacao);
+    }
+
+    public Funcionario[] getFuncionarios() {
+        return funcionarios;
     }
 
     public void printaFuncionarios() {
