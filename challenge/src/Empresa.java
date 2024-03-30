@@ -5,12 +5,9 @@ import cargos.Vendedor;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import java.text.Normalizer;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 public class Empresa {
     private final Funcionario[] funcionarios;
@@ -32,6 +29,38 @@ public class Empresa {
         } else {
             System.out.println("A lista para cadastro está vazia!");
         }
+    }
+
+    public double[] calcularValorPago(LocalDate date) {
+        double[] totalPago = new double[this.funcionarios.length];
+
+        for(int i = 0; i < this.funcionarios.length; i++) {
+            Funcionario funcionario = this.funcionarios[i];
+
+            if (date.isAfter(funcionario.getInicioContrato())) {
+                Period periodo = Period.between(funcionario.getInicioContrato(), date);
+                int anosTrabalhados = periodo.getYears();
+
+                totalPago[i] = getSalarioRecebido(anosTrabalhados, periodo, funcionario);
+            }
+        }
+        return totalPago;
+    }
+
+    private static double getSalarioRecebido(int anosTrabalhados, Period periodo, Funcionario funcionario) {
+        int mesesTrabalhados = anosTrabalhados * 12 + periodo.getMonths();
+        int mesesTrabalhadosComBonus = mesesTrabalhados - 12;
+
+        double bonusAnual = funcionario.getCargo().getBonusPorAno();
+        double salarioBase = funcionario.getCargo().getSalario();
+        double salarioRecebido = (salarioBase * mesesTrabalhados) + (mesesTrabalhadosComBonus * bonusAnual);
+
+        while (mesesTrabalhadosComBonus > 0) {
+            mesesTrabalhadosComBonus -= 12;
+            if(mesesTrabalhadosComBonus > 0){
+                salarioRecebido += mesesTrabalhadosComBonus * bonusAnual;
+        }}
+        return salarioRecebido;
     }
 
     private static Funcionario getFuncionario(String cargoFuncionario, String nomeFuncionario, String contratacao) {
