@@ -42,6 +42,19 @@ public class Funcionario {
         return 0;
     }
 
+    public double getSalarioRecebidoNoMes(LocalDate date) {
+        if(!date.isBefore(this.inicioContrato)) {
+            Period periodo = Period.between(this.getInicioContrato(), date);
+            int anosTrabalhados = periodo.getYears();
+            double salarioDoCargo = this.getCargo().getSalario();
+            double bonusAnual = this.getCargo().getBonusPorAno();
+
+            return salarioDoCargo + (bonusAnual * anosTrabalhados);
+        }
+
+        return 0;
+    }
+
     public String getNome() {
         return nome;
     }

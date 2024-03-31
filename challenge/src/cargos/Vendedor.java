@@ -40,6 +40,27 @@ public class Vendedor extends Cargo{
         return bonificacaoTotal;
     }
 
+    public double getBonificacaoNoMes(JsonArray vendas, String nome, LocalDate date) {
+        double vendaNoMes = 0;
+        for (int i = 0; i < vendas.size(); i++) {
+            JsonObject venda = vendas.get(i).getAsJsonObject();
+            String nomeVendedor = venda.get("nome").getAsString();
+
+            if (nomeVendedor.equals(nome)) {
+                JsonObject vendasPorMes = venda.getAsJsonObject("vendas_por_mes");
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yyyy");
+                String dataFormatada = date.format(formatter);
+
+                if (vendasPorMes.get(dataFormatada) != null) {
+                    vendaNoMes = vendasPorMes.get(dataFormatada).getAsDouble() * this.getBonificacao();
+                    System.out.println("A venda no mes foi: " + vendaNoMes);
+                }
+            }
+        }
+
+        return vendaNoMes;
+    }
+
     @Override
     public String toString() {
         return "Vendedor";

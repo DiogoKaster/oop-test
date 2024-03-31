@@ -10,41 +10,39 @@ public class Main {
 
         Empresa empresa = new Empresa(dataFuncionarios);
 
-        double[] listaValoresPagosSB = empresa.calcularValorPago(LocalDate.of(2020, 1, 1), vendas, false);
-        double[] listaValoresPagosCB = empresa.calcularValorPago(LocalDate.of(2020, 1, 1), vendas, true);
-        double valorPagoEmBeneficios = empresa.calcularValorTotalEmBeneficios(LocalDate.of(2020, 1, 1), vendas);
-        Funcionario funcionarioMaisPagoSB = empresa.calcularValorMaisAltoMesSB(LocalDate.of(2020, 1, 1));
-        Funcionario funcionarioMaisPagoCB = empresa.calcularValorMaisAltoMesCB(LocalDate.of(2020, 1, 1), vendas);
-        Funcionario vendedorMaisPago = empresa.calcularMelhorVendedor(LocalDate.of(2022, 4, 1), vendas);
-
-        double valorTotalPagoSB = 0;
-        double valorTotalPagoCB = 0;
-
-        for(double valor : listaValoresPagosSB) {
-            valorTotalPagoSB += valor;
-        }
-
-        for(double valor : listaValoresPagosCB) {
-            valorTotalPagoCB += valor;
-        }
-
+        double[] listaValoresPagosSB = empresa.calcularValorPago(LocalDate.of(2022, 1, 1), vendas, false);
+        double valorTotalPagoSB = empresa.getValorTotalLista(listaValoresPagosSB);
         System.out.println();
         System.out.println("Valor total pago sem benefícios: " + valorTotalPagoSB);
+
+        double[] listaValoresPagosCB = empresa.calcularValorPago(LocalDate.of(2022, 1, 1), vendas, true);
+        double valorTotalPagoCB = empresa.getValorTotalLista(listaValoresPagosCB);
         System.out.println();
         System.out.println("Valor total pago com benefícios: " + valorTotalPagoCB);
-        System.out.println();
-        System.out.println("Valor total pago em benefícios: " + valorPagoEmBeneficios);
-        System.out.println();
-        System.out.println("Funcionário que mais recebeu em benefícios no mês: " + funcionarioMaisPagoSB.getNome());
-        System.out.println();
-        System.out.println("Funcionário com benefícios que mais recebeu no mês: " + funcionarioMaisPagoCB.getNome());
-        System.out.println();
 
-        if(vendedorMaisPago != null) {
-            System.out.println("Vendedor mais bem pago: " + vendedorMaisPago.getNome());
-            System.out.println();
-        } else {
-            System.out.println("Não existiram vendas nesse mês");
-        }
+        double[] listaBeneficiosNoMes = empresa.calcularValorTotalEmBeneficios(LocalDate.of(2022, 1, 1), vendas);
+        double valorPagoEmBeneficios = empresa.getValorTotalLista(listaBeneficiosNoMes);
+        System.out.println();
+        System.out.println("Valor total pago em benefícios no mês: " + valorPagoEmBeneficios);
+
+        Funcionario funcionarioMaisPagoSB = empresa.calcularValorMaisAltoMesSB(LocalDate.of(2022, 1, 1));
+        System.out.println();
+        System.out.println("Funcionário que mais recebeu no mês: " + funcionarioMaisPagoSB.getNome());
+
+
+//        Funcionario funcionarioMaisPagoCB = empresa.calcularValorMaisAltoMesCB(LocalDate.of(2020, 1, 1), vendas);
+//        Funcionario vendedorMaisPago = empresa.calcularMelhorVendedor(LocalDate.of(2022, 4, 1), vendas);
+
+//
+//        System.out.println();
+//        System.out.println("Funcionário com benefícios que mais recebeu no mês: " + funcionarioMaisPagoCB.getNome());
+//        System.out.println();
+//
+//        if(vendedorMaisPago != null) {
+//            System.out.println("Vendedor mais bem pago: " + vendedorMaisPago.getNome());
+//            System.out.println();
+//        } else {
+//            System.out.println("Não existiram vendas nesse mês");
+//        }
     }
 }

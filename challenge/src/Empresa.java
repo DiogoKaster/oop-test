@@ -37,29 +37,32 @@ public class Empresa {
         for(int i = 0; i < this.funcionarios.length; i++) {
             Funcionario funcionario = this.funcionarios[i];
 
-            totalPago[i] = funcionario.getSalarioRecebido(date);
+            totalPago[i] = funcionario.getSalarioRecebidoNoMes(date);
 
             if (comBeneficios) {
                 if(funcionario.getCargo() instanceof Secretario) {
                     totalPago[i] += totalPago[i] * funcionario.getCargo().getBonificacao();
                 } else if (funcionario.getCargo() instanceof Vendedor) {
-                    totalPago[i] += ((Vendedor) funcionario.getCargo()).getBonificacaoEmVendas(vendas, funcionario.getNome(), date);
+                    totalPago[i] += ((Vendedor) funcionario.getCargo()).getBonificacaoNoMes(vendas, funcionario.getNome(), date);
                 }
             }
         }
         return totalPago;
     }
-    public double calcularValorTotalEmBeneficios(LocalDate date, JsonArray vendas) {
-        double totalPago = 0;
+    public double[] calcularValorTotalEmBeneficios(LocalDate date, JsonArray vendas) {
+        double[] totalPago = new double[this.funcionarios.length];
 
-        for (Funcionario funcionario : this.funcionarios) {
+        for (int i = 0; i < this.funcionarios.length; i++) {
+            Funcionario funcionario = this.funcionarios[i];
+
             if (funcionario.getCargo() instanceof Secretario) {
-                double salarioFuncionario = funcionario.getSalarioRecebido(date);
-                totalPago += salarioFuncionario * funcionario.getCargo().getBonificacao();
+                double salarioFuncionario = funcionario.getSalarioRecebidoNoMes(date);
+                totalPago[i] = salarioFuncionario * funcionario.getCargo().getBonificacao();
             } else if (funcionario.getCargo() instanceof Vendedor) {
-                totalPago += ((Vendedor) funcionario.getCargo()).getBonificacaoEmVendas(vendas, funcionario.getNome(), date);
+                totalPago[i] = ((Vendedor) funcionario.getCargo()).getBonificacaoNoMes(vendas, funcionario.getNome(), date);
             }
         }
+
         return totalPago;
     }
 
@@ -69,13 +72,7 @@ public class Empresa {
 
         for (Funcionario funcionario : this.funcionarios) {
             if (date.isAfter(funcionario.getInicioContrato())) {
-                Period periodo = Period.between(funcionario.getInicioContrato(), date);
-                int anosTrabalhados = periodo.getYears();
-
-                double salarioDoCargo = funcionario.getCargo().getSalario();
-                double bonusAnual = funcionario.getCargo().getBonusPorAno();
-
-                double salarioFinal = salarioDoCargo + (bonusAnual * (anosTrabalhados - 1));
+                double salarioFinal = funcionario.getSalarioRecebidoNoMes(date);
 
                 if(salarioFinal > salarioMaisAlto) {
                     salarioMaisAlto = salarioFinal;
@@ -93,12 +90,7 @@ public class Empresa {
 
         for (Funcionario funcionario : this.funcionarios) {
             if (date.isAfter(funcionario.getInicioContrato()) && !(funcionario.getCargo() instanceof Gerente)) {
-                Period periodo = Period.between(funcionario.getInicioContrato(), date);
-                int anosTrabalhados = periodo.getYears();
-                double salarioDoCargo = funcionario.getCargo().getSalario();
-                double bonusAnual = funcionario.getCargo().getBonusPorAno();
-
-                double salarioFinal = salarioDoCargo + (bonusAnual * (anosTrabalhados - 1));
+                double salarioFinal = funcionario.getSalarioRecebidoNoMes(date);
 
                 if (funcionario.getCargo() instanceof Secretario) {
                     salarioFinal = salarioFinal * funcionario.getCargo().getBonificacao();
@@ -188,6 +180,20 @@ public class Empresa {
         }
 
         return new Funcionario(nomeFuncionario, cargo, dateContratacao);
+    }
+    public double getValorTotalLista(double[] totalPagoLista) {
+        if(totalPagoLista.length > 0) {
+            double totalPago = 0;
+
+            for (double valor : totalPagoLista) {
+                System.out.println(valor);
+                totalPago += valor;
+            }
+
+            return totalPago;
+        }
+
+        return 0;
     }
 
     public Funcionario[] getFuncionarios() {
