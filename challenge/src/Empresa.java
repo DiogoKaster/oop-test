@@ -6,6 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
 public class Empresa {
@@ -70,6 +71,30 @@ public class Empresa {
             }
         }
         return totalPago;
+    }
+
+    public Funcionario calcularValorMaisAltoMes(LocalDate date) {
+        double salarioMaisAlto = 0;
+        Funcionario funcionarioMaisPago = null;
+
+        for (Funcionario funcionario : this.funcionarios) {
+            if (date.isAfter(funcionario.inicioContrato())) {
+                Period periodo = Period.between(funcionario.inicioContrato(), date);
+                int anosTrabalhados = periodo.getYears();
+
+                double salarioDoCargo = funcionario.cargo().getSalario();
+                double bonusAnual = funcionario.cargo().getBonusPorAno();
+
+                double salarioFinal = salarioDoCargo + (bonusAnual * anosTrabalhados - 1);
+
+                if(salarioFinal > salarioMaisAlto) {
+                    salarioMaisAlto = salarioFinal;
+                    funcionarioMaisPago = funcionario;
+                }
+            }
+        }
+
+        return funcionarioMaisPago;
     }
 
     private static Funcionario getFuncionario(String cargoFuncionario, String nomeFuncionario, String contratacao) {
