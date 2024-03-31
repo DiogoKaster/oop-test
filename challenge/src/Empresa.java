@@ -40,7 +40,7 @@ public class Empresa {
             totalPago[i] = funcionario.getSalarioRecebido(date);
 
             if(funcionario.getCargo() instanceof Secretario) {
-                totalPago[i] += totalPago[i] * ((Secretario) funcionario.getCargo()).getBonificacao();
+                totalPago[i] += totalPago[i] * funcionario.getCargo().getBonificacao();
             } else if (funcionario.getCargo() instanceof Vendedor) {
                 totalPago[i] += ((Vendedor) funcionario.getCargo()).getBonificacaoEmVendas(vendas, funcionario.getNome(), date);
             }
@@ -73,7 +73,7 @@ public class Empresa {
         return totalPago;
     }
 
-    public Funcionario calcularValorMaisAltoMes(LocalDate date) {
+    public Funcionario calcularValorMaisAltoMesSB(LocalDate date) {
         double salarioMaisAlto = 0;
         Funcionario funcionarioMaisPago = null;
 
@@ -85,7 +85,54 @@ public class Empresa {
                 double salarioDoCargo = funcionario.getCargo().getSalario();
                 double bonusAnual = funcionario.getCargo().getBonusPorAno();
 
-                double salarioFinal = salarioDoCargo + (bonusAnual * anosTrabalhados - 1);
+                double salarioFinal = salarioDoCargo + (bonusAnual * (anosTrabalhados - 1));
+
+                if(salarioFinal > salarioMaisAlto) {
+                    salarioMaisAlto = salarioFinal;
+                    funcionarioMaisPago = funcionario;
+                }
+            }
+        }
+
+        return funcionarioMaisPago;
+    }
+
+    public Funcionario calcularValorMaisAltoMesCB(LocalDate date, JsonArray vendas) {
+        double salarioMaisAlto = 0;
+        Funcionario funcionarioMaisPago = null;
+
+        for (Funcionario funcionario : this.funcionarios) {
+            if (date.isAfter(funcionario.getInicioContrato()) && !(funcionario.getCargo() instanceof Gerente)) {
+                Period periodo = Period.between(funcionario.getInicioContrato(), date);
+                int anosTrabalhados = periodo.getYears();
+                double salarioDoCargo = funcionario.getCargo().getSalario();
+                double bonusAnual = funcionario.getCargo().getBonusPorAno();
+
+                double salarioFinal = salarioDoCargo + (bonusAnual * (anosTrabalhados - 1));
+
+                if (funcionario.getCargo() instanceof Secretario) {
+                    salarioFinal = salarioFinal * funcionario.getCargo().getBonificacao();
+                } else if (funcionario.getCargo() instanceof Vendedor) {
+                    for (int i = 0; i < vendas.size(); i++) {
+                        JsonObject venda = vendas.get(i).getAsJsonObject();
+
+                        String nomeVendedor = venda.get("nome").getAsString();
+                        if(nomeVendedor.equals(funcionario.getNome())) {
+                            JsonObject vendasPorMes = venda.getAsJsonObject("vendas_por_mes");
+                            for(String mes : vendasPorMes.keySet()) {
+                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
+                                LocalDate dataVenda = LocalDate.parse("01/" + mes, formatter);
+
+                                if(dataVenda.isAfter(date)){
+                                    salarioFinal = 0;
+                                } else {
+                                    double valorVenda = vendasPorMes.get(mes).getAsDouble();
+                                    salarioFinal = valorVenda * funcionario.getCargo().getBonificacao();
+                                }
+                            }
+                        }
+                    }
+                }
 
                 if(salarioFinal > salarioMaisAlto) {
                     salarioMaisAlto = salarioFinal;

@@ -19,5 +19,5 @@ public class Cargo {
         return bonusPorAno;
     }
 
-
+    public double getBonificacao() { return bonificacao; }
 }
