@@ -1,8 +1,5 @@
 package cargos;
 
-import java.time.LocalDate;
-import java.time.Period;
-
 public class Secretario extends Cargo{
     public Secretario() {
         super(7000, 1000, 0.20);

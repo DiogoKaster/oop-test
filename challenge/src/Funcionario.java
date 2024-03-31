@@ -3,7 +3,16 @@ import cargos.Cargo;
 import java.time.LocalDate;
 import java.time.Period;
 
-public record Funcionario(String nome, Cargo cargo, LocalDate inicioContrato) {
+public class Funcionario {
+    private String nome;
+    private Cargo cargo;
+    private LocalDate inicioContrato;
+
+    public Funcionario(String nome, Cargo cargo, LocalDate inicioContrato) {
+        this.nome = nome;
+        this.cargo = cargo;
+        this.inicioContrato = inicioContrato;
+    }
 
     public double getSalarioRecebido(LocalDate date) {
         if (date.isAfter(this.inicioContrato)) {
@@ -31,5 +40,17 @@ public record Funcionario(String nome, Cargo cargo, LocalDate inicioContrato) {
             return salarioRecebido;
         }
         return 0;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public Cargo getCargo() {
+        return cargo;
+    }
+
+    public LocalDate getInicioContrato() {
+        return inicioContrato;
     }
 }

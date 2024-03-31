@@ -15,7 +15,6 @@ public class Repository {
 
     public Repository() {
         Gson gson = new Gson();
-        Path path = Paths.get("data/cargos.json");
         try {
             InputStreamReader cargoData = new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/data/cargos.json")));
             cargos = gson.fromJson(cargoData, JsonObject.class);

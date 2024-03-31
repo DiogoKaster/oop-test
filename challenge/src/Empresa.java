@@ -39,10 +39,10 @@ public class Empresa {
 
             totalPago[i] = funcionario.getSalarioRecebido(date);
 
-            if(funcionario.cargo() instanceof Secretario) {
-                totalPago[i] += totalPago[i] * ((Secretario) funcionario.cargo()).getBonificacao();
-            } else if (funcionario.cargo() instanceof Vendedor) {
-                totalPago[i] += ((Vendedor) funcionario.cargo()).getBonificacaoEmVendas(vendas, funcionario.nome(), date);
+            if(funcionario.getCargo() instanceof Secretario) {
+                totalPago[i] += totalPago[i] * ((Secretario) funcionario.getCargo()).getBonificacao();
+            } else if (funcionario.getCargo() instanceof Vendedor) {
+                totalPago[i] += ((Vendedor) funcionario.getCargo()).getBonificacaoEmVendas(vendas, funcionario.getNome(), date);
             }
         }
         return totalPago;
@@ -63,11 +63,11 @@ public class Empresa {
         double totalPago = 0;
 
         for (Funcionario funcionario : this.funcionarios) {
-            if (funcionario.cargo() instanceof Secretario) {
+            if (funcionario.getCargo() instanceof Secretario) {
                 double salarioFuncionario = funcionario.getSalarioRecebido(date);
-                totalPago += salarioFuncionario * ((Secretario) funcionario.cargo()).getBonificacao();
-            } else if (funcionario.cargo() instanceof Vendedor) {
-                totalPago += ((Vendedor) funcionario.cargo()).getBonificacaoEmVendas(vendas, funcionario.nome(), date);
+                totalPago += salarioFuncionario * ((Secretario) funcionario.getCargo()).getBonificacao();
+            } else if (funcionario.getCargo() instanceof Vendedor) {
+                totalPago += ((Vendedor) funcionario.getCargo()).getBonificacaoEmVendas(vendas, funcionario.getNome(), date);
             }
         }
         return totalPago;
@@ -78,12 +78,12 @@ public class Empresa {
         Funcionario funcionarioMaisPago = null;
 
         for (Funcionario funcionario : this.funcionarios) {
-            if (date.isAfter(funcionario.inicioContrato())) {
-                Period periodo = Period.between(funcionario.inicioContrato(), date);
+            if (date.isAfter(funcionario.getInicioContrato())) {
+                Period periodo = Period.between(funcionario.getInicioContrato(), date);
                 int anosTrabalhados = periodo.getYears();
 
-                double salarioDoCargo = funcionario.cargo().getSalario();
-                double bonusAnual = funcionario.cargo().getBonusPorAno();
+                double salarioDoCargo = funcionario.getCargo().getSalario();
+                double bonusAnual = funcionario.getCargo().getBonusPorAno();
 
                 double salarioFinal = salarioDoCargo + (bonusAnual * anosTrabalhados - 1);
 
@@ -126,9 +126,9 @@ public class Empresa {
 
     public void printaFuncionarios() {
         for(Funcionario funcionario : this.funcionarios) {
-            System.out.println("Nome: " + funcionario.nome());
-            System.out.println("Cargo: " + funcionario.cargo());
-            System.out.println("Contratacao: " + funcionario.inicioContrato());
+            System.out.println("Nome: " + funcionario.getNome());
+            System.out.println("Cargo: " + funcionario.getCargo());
+            System.out.println("Contratacao: " + funcionario.getInicioContrato());
             System.out.println();
         }
     }
