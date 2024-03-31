@@ -144,6 +144,42 @@ public class Empresa {
         return funcionarioMaisPago;
     }
 
+    public Funcionario calcularMelhorVendedor(LocalDate date, JsonArray vendas) {
+        Funcionario melhorVendedorMes = null;
+        double maiorVenda = 0;
+
+        for (Funcionario funcionario : this.funcionarios) {
+            double vendaAtual = 0;
+            if (funcionario.getCargo() instanceof Vendedor) {
+                for (int i = 0; i < vendas.size(); i++) {
+                    JsonObject venda = vendas.get(i).getAsJsonObject();
+                    String nomeVendedor = venda.get("nome").getAsString();
+
+                    if (nomeVendedor.equals(funcionario.getNome())) {
+                        JsonObject vendasPorMes = venda.getAsJsonObject("vendas_por_mes");
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yyyy");
+                        String dataFormatada = date.format(formatter);
+
+                        if(vendasPorMes.get(dataFormatada).getAsDouble() > 0) {
+                            vendaAtual = vendasPorMes.get(dataFormatada).getAsDouble();
+                        } else {
+                            vendaAtual = 0;
+                            System.out.println("Nesse mês não existem vendas.");
+                        }
+                    }
+                }
+            }
+
+            if(vendaAtual > maiorVenda) {
+                maiorVenda = vendaAtual;
+                melhorVendedorMes = funcionario;
+            }
+        }
+
+
+        return melhorVendedorMes;
+    }
+
     private static Funcionario getFuncionario(String cargoFuncionario, String nomeFuncionario, String contratacao) {
         Cargo cargo = null;
 

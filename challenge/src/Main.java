@@ -15,6 +15,7 @@ public class Main {
         double valorPagoEmBeneficios = empresa.calcularValorTotalEmBeneficios(LocalDate.of(2020, 1, 1), vendas);
         Funcionario funcionarioMaisPagoSB = empresa.calcularValorMaisAltoMesSB(LocalDate.of(2020, 1, 1));
         Funcionario funcionarioMaisPagoCB = empresa.calcularValorMaisAltoMesCB(LocalDate.of(2023, 1, 1), vendas);
+        Funcionario vendedorMaisPago = empresa.calcularMelhorVendedor(LocalDate.of(2022, 4, 1), vendas);
 
         double valorTotalPagoSB = 0;
         double valorTotalPagoCB = 0;
@@ -37,6 +38,8 @@ public class Main {
         System.out.println("Funcionário que mais recebeu no mês: " + funcionarioMaisPagoSB.getNome());
         System.out.println();
         System.out.println("Funcionário com benefícios que mais recebeu no mês: " + funcionarioMaisPagoCB.getNome());
+        System.out.println();
+        System.out.println("Vendedor mais bem pago: " + vendedorMaisPago.getNome());
         System.out.println();
     }
 }
