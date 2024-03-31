@@ -19,10 +19,12 @@ public class Main {
         double valorTotalPagoCB = 0;
 
         for(double valor : listaValoresPagosSB) {
+            System.out.println(valor);
             valorTotalPagoSB += valor;
         }
 
         for(double valor : listaValoresPagosCB) {
+            System.out.println(valor);
             valorTotalPagoCB += valor;
         }
 
@@ -33,7 +35,7 @@ public class Main {
         System.out.println();
         System.out.println("Valor total pago em benefícios: " + valorPagoEmBeneficios);
         System.out.println();
-        System.out.println("Funcionário que mais recebeu no mês: " + funcionarioMaisPago.nome());
+        System.out.println("Funcionário que mais recebeu no mês: " + funcionarioMaisPago.getNome());
         System.out.println();
     }
 }
