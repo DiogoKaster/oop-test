@@ -90,30 +90,12 @@ public class Empresa {
 
         for (Funcionario funcionario : this.funcionarios) {
             if (date.isAfter(funcionario.getInicioContrato()) && !(funcionario.getCargo() instanceof Gerente)) {
-                double salarioFinal = funcionario.getSalarioRecebidoNoMes(date);
+                double salarioFinal = 0;
 
                 if (funcionario.getCargo() instanceof Secretario) {
-                    salarioFinal = salarioFinal * funcionario.getCargo().getBonificacao();
+                    salarioFinal = funcionario.getSalarioRecebidoNoMes(date) * funcionario.getCargo().getBonificacao();
                 } else if (funcionario.getCargo() instanceof Vendedor) {
-                    for (int i = 0; i < vendas.size(); i++) {
-                        JsonObject venda = vendas.get(i).getAsJsonObject();
-
-                        String nomeVendedor = venda.get("nome").getAsString();
-                        if(nomeVendedor.equals(funcionario.getNome())) {
-                            JsonObject vendasPorMes = venda.getAsJsonObject("vendas_por_mes");
-                            for(String mes : vendasPorMes.keySet()) {
-                                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/MM/yyyy");
-                                LocalDate dataVenda = LocalDate.parse("01/" + mes, formatter);
-
-                                if(dataVenda.isAfter(date)){
-                                    salarioFinal = 0;
-                                } else {
-                                    double valorVenda = vendasPorMes.get(mes).getAsDouble();
-                                    salarioFinal = valorVenda * funcionario.getCargo().getBonificacao();
-                                }
-                            }
-                        }
-                    }
+                    salarioFinal = ((Vendedor) funcionario.getCargo()).getBonificacaoNoMes(vendas, funcionario.getNome(), date);
                 }
 
                 if(salarioFinal > salarioMaisAlto) {
@@ -186,7 +168,6 @@ public class Empresa {
             double totalPago = 0;
 
             for (double valor : totalPagoLista) {
-                System.out.println(valor);
                 totalPago += valor;
             }
 
@@ -194,10 +175,6 @@ public class Empresa {
         }
 
         return 0;
-    }
-
-    public Funcionario[] getFuncionarios() {
-        return funcionarios;
     }
 
     public void printaFuncionarios() {

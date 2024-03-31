@@ -29,20 +29,20 @@ public class Main {
         System.out.println();
         System.out.println("Funcionário que mais recebeu no mês: " + funcionarioMaisPagoSB.getNome());
 
+        Funcionario funcionarioMaisPagoCB = empresa.calcularValorMaisAltoMesCB(LocalDate.of(2022, 4, 1), vendas);
+        System.out.println();
+        System.out.println("Funcionário com benefícios que mais recebeu no mês: " + funcionarioMaisPagoCB.getNome());
 
-//        Funcionario funcionarioMaisPagoCB = empresa.calcularValorMaisAltoMesCB(LocalDate.of(2020, 1, 1), vendas);
-//        Funcionario vendedorMaisPago = empresa.calcularMelhorVendedor(LocalDate.of(2022, 4, 1), vendas);
 
-//
-//        System.out.println();
-//        System.out.println("Funcionário com benefícios que mais recebeu no mês: " + funcionarioMaisPagoCB.getNome());
-//        System.out.println();
-//
-//        if(vendedorMaisPago != null) {
-//            System.out.println("Vendedor mais bem pago: " + vendedorMaisPago.getNome());
-//            System.out.println();
-//        } else {
-//            System.out.println("Não existiram vendas nesse mês");
-//        }
+        Funcionario vendedorMaisPago = empresa.calcularMelhorVendedor(LocalDate.of(2022, 1, 1), vendas);
+
+        System.out.println();
+
+        if(vendedorMaisPago != null) {
+            System.out.println("Vendedor mais bem pago: " + vendedorMaisPago.getNome());
+            System.out.println();
+        } else {
+            System.out.println("Não existiram vendas nesse mês");
+        }
     }
 }
