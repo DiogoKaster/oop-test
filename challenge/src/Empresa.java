@@ -160,11 +160,8 @@ public class Empresa {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yyyy");
                         String dataFormatada = date.format(formatter);
 
-                        if(vendasPorMes.get(dataFormatada).getAsDouble() > 0) {
+                        if(vendasPorMes.get(dataFormatada) != null) {
                             vendaAtual = vendasPorMes.get(dataFormatada).getAsDouble();
-                        } else {
-                            vendaAtual = 0;
-                            System.out.println("Nesse mês não existem vendas.");
                         }
                     }
                 }

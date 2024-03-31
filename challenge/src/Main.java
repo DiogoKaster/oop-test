@@ -10,21 +10,26 @@ public class Main {
 
         Empresa empresa = new Empresa(dataFuncionarios);
 
-        double[] listaValoresPagosSB = empresa.calcularValorPagoSemBeneficios(LocalDate.of(2020, 1, 1));
-        double[] listaValoresPagosCB = empresa.calcularValorPagoComBeneficios(LocalDate.of(2020, 1, 1), vendas);
-        double valorPagoEmBeneficios = empresa.calcularValorTotalEmBeneficios(LocalDate.of(2020, 1, 1), vendas);
-        Funcionario funcionarioMaisPagoSB = empresa.calcularValorMaisAltoMesSB(LocalDate.of(2020, 1, 1));
+        double[] listaValoresPagosSB = empresa.calcularValorPagoSemBeneficios(LocalDate.of(2010, 1, 1));
+        double[] listaValoresPagosCB = empresa.calcularValorPagoComBeneficios(LocalDate.of(2023, 1, 1), vendas);
+        double valorPagoEmBeneficios = empresa.calcularValorTotalEmBeneficios(LocalDate.of(2023, 1, 1), vendas);
+        Funcionario funcionarioMaisPagoSB = empresa.calcularValorMaisAltoMesSB(LocalDate.of(2023, 1, 1));
         Funcionario funcionarioMaisPagoCB = empresa.calcularValorMaisAltoMesCB(LocalDate.of(2023, 1, 1), vendas);
-        Funcionario vendedorMaisPago = empresa.calcularMelhorVendedor(LocalDate.of(2022, 4, 1), vendas);
+        Funcionario vendedorMaisPago = empresa.calcularMelhorVendedor(LocalDate.of(2023, 4, 1), vendas);
 
         double valorTotalPagoSB = 0;
         double valorTotalPagoCB = 0;
 
         for(double valor : listaValoresPagosSB) {
+            System.out.println(valor);
+            System.out.println();
             valorTotalPagoSB += valor;
         }
 
         for(double valor : listaValoresPagosCB) {
+            System.out.println();
+            System.out.println(valor);
+            System.out.println();
             valorTotalPagoCB += valor;
         }
 
@@ -39,7 +44,12 @@ public class Main {
         System.out.println();
         System.out.println("Funcionário com benefícios que mais recebeu no mês: " + funcionarioMaisPagoCB.getNome());
         System.out.println();
-        System.out.println("Vendedor mais bem pago: " + vendedorMaisPago.getNome());
-        System.out.println();
+
+        if(vendedorMaisPago != null) {
+            System.out.println("Vendedor mais bem pago: " + vendedorMaisPago.getNome());
+            System.out.println();
+        } else {
+            System.out.println("Não existiram vendas nesse mês");
+        }
     }
 }
