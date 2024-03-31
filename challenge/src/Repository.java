@@ -9,17 +9,12 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 public class Repository {
-    private JsonObject cargos;
     private JsonObject funcionarios;
     private JsonObject vendas;
 
     public Repository() {
         Gson gson = new Gson();
         try {
-            InputStreamReader cargoData = new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/data/cargos.json")));
-            cargos = gson.fromJson(cargoData, JsonObject.class);
-            cargoData.close();
-
             InputStreamReader funcionariosData = new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream("/data/funcionarios.json")));
             funcionarios = gson.fromJson(funcionariosData, JsonObject.class);
             funcionariosData.close();
@@ -32,10 +27,6 @@ public class Repository {
             System.out.println("Error: " + error.getMessage());
         }
     }
-    public JsonArray getCargos() {
-        return cargos.getAsJsonArray("cargos");
-    }
-
     public JsonArray getFuncionarios() {
         return funcionarios.getAsJsonArray("funcionarios");
     }

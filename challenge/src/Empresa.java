@@ -31,7 +31,7 @@ public class Empresa {
         }
     }
 
-    public double[] calcularValorPagoComBeneficios(LocalDate date, JsonArray vendas) {
+    public double[] calcularValorPago(LocalDate date, JsonArray vendas, boolean comBeneficios) {
         double[] totalPago = new double[this.funcionarios.length];
 
         for(int i = 0; i < this.funcionarios.length; i++) {
@@ -39,33 +39,23 @@ public class Empresa {
 
             totalPago[i] = funcionario.getSalarioRecebido(date);
 
-            if(funcionario.getCargo() instanceof Secretario) {
-                totalPago[i] += totalPago[i] * funcionario.getCargo().getBonificacao();
-            } else if (funcionario.getCargo() instanceof Vendedor) {
-                totalPago[i] += ((Vendedor) funcionario.getCargo()).getBonificacaoEmVendas(vendas, funcionario.getNome(), date);
+            if (comBeneficios) {
+                if(funcionario.getCargo() instanceof Secretario) {
+                    totalPago[i] += totalPago[i] * funcionario.getCargo().getBonificacao();
+                } else if (funcionario.getCargo() instanceof Vendedor) {
+                    totalPago[i] += ((Vendedor) funcionario.getCargo()).getBonificacaoEmVendas(vendas, funcionario.getNome(), date);
+                }
             }
         }
         return totalPago;
     }
-
-    public double[] calcularValorPagoSemBeneficios(LocalDate date) {
-        double[] totalPago = new double[this.funcionarios.length];
-
-        for(int i = 0; i < this.funcionarios.length; i++) {
-            Funcionario funcionario = this.funcionarios[i];
-
-            totalPago[i] = funcionario.getSalarioRecebido(date);
-        }
-        return totalPago;
-    }
-
     public double calcularValorTotalEmBeneficios(LocalDate date, JsonArray vendas) {
         double totalPago = 0;
 
         for (Funcionario funcionario : this.funcionarios) {
             if (funcionario.getCargo() instanceof Secretario) {
                 double salarioFuncionario = funcionario.getSalarioRecebido(date);
-                totalPago += salarioFuncionario * ((Secretario) funcionario.getCargo()).getBonificacao();
+                totalPago += salarioFuncionario * funcionario.getCargo().getBonificacao();
             } else if (funcionario.getCargo() instanceof Vendedor) {
                 totalPago += ((Vendedor) funcionario.getCargo()).getBonificacaoEmVendas(vendas, funcionario.getNome(), date);
             }

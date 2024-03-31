@@ -10,26 +10,21 @@ public class Main {
 
         Empresa empresa = new Empresa(dataFuncionarios);
 
-        double[] listaValoresPagosSB = empresa.calcularValorPagoSemBeneficios(LocalDate.of(2010, 1, 1));
-        double[] listaValoresPagosCB = empresa.calcularValorPagoComBeneficios(LocalDate.of(2023, 1, 1), vendas);
-        double valorPagoEmBeneficios = empresa.calcularValorTotalEmBeneficios(LocalDate.of(2023, 1, 1), vendas);
-        Funcionario funcionarioMaisPagoSB = empresa.calcularValorMaisAltoMesSB(LocalDate.of(2023, 1, 1));
-        Funcionario funcionarioMaisPagoCB = empresa.calcularValorMaisAltoMesCB(LocalDate.of(2023, 1, 1), vendas);
-        Funcionario vendedorMaisPago = empresa.calcularMelhorVendedor(LocalDate.of(2023, 4, 1), vendas);
+        double[] listaValoresPagosSB = empresa.calcularValorPago(LocalDate.of(2020, 1, 1), vendas, false);
+        double[] listaValoresPagosCB = empresa.calcularValorPago(LocalDate.of(2020, 1, 1), vendas, true);
+        double valorPagoEmBeneficios = empresa.calcularValorTotalEmBeneficios(LocalDate.of(2020, 1, 1), vendas);
+        Funcionario funcionarioMaisPagoSB = empresa.calcularValorMaisAltoMesSB(LocalDate.of(2020, 1, 1));
+        Funcionario funcionarioMaisPagoCB = empresa.calcularValorMaisAltoMesCB(LocalDate.of(2020, 1, 1), vendas);
+        Funcionario vendedorMaisPago = empresa.calcularMelhorVendedor(LocalDate.of(2022, 4, 1), vendas);
 
         double valorTotalPagoSB = 0;
         double valorTotalPagoCB = 0;
 
         for(double valor : listaValoresPagosSB) {
-            System.out.println(valor);
-            System.out.println();
             valorTotalPagoSB += valor;
         }
 
         for(double valor : listaValoresPagosCB) {
-            System.out.println();
-            System.out.println(valor);
-            System.out.println();
             valorTotalPagoCB += valor;
         }
 
@@ -40,7 +35,7 @@ public class Main {
         System.out.println();
         System.out.println("Valor total pago em benefícios: " + valorPagoEmBeneficios);
         System.out.println();
-        System.out.println("Funcionário que mais recebeu no mês: " + funcionarioMaisPagoSB.getNome());
+        System.out.println("Funcionário que mais recebeu em benefícios no mês: " + funcionarioMaisPagoSB.getNome());
         System.out.println();
         System.out.println("Funcionário com benefícios que mais recebeu no mês: " + funcionarioMaisPagoCB.getNome());
         System.out.println();
