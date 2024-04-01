@@ -9,9 +9,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class Empresa {
-    private final Funcionario[] funcionarios;
+    private Funcionario[] funcionarios;
 
-    private final JsonArray vendas;
+    private JsonArray vendas;
 
     public Empresa(JsonArray funcionariosJson, JsonArray vendas) {
         this.funcionarios = new Funcionario[funcionariosJson.size()];
@@ -165,5 +165,13 @@ public class Empresa {
         }
 
         return new Funcionario(nomeFuncionario, cargo, dateContratacao);
+    }
+
+    public void setFuncionarios(Funcionario[] funcionarios) {
+        this.funcionarios = funcionarios;
+    }
+
+    public void setVendas(JsonArray vendas) {
+        this.vendas = vendas;
     }
 }
