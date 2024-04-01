@@ -10,9 +10,9 @@ public class Main {
 
         Empresa empresa = new Empresa(funcionarios, vendas);
 
-        double valorTotalPagoSB = empresa.calcularValorPagoNoMes(LocalDate.of(2015, 12, 1), false);
-        double valorTotalPagoCB = empresa.calcularValorPagoNoMes(LocalDate.of(2015, 12, 1), true);
-        double valorPagoEmBeneficios = empresa.calcularValorTotalEmBeneficios(LocalDate.of(2015, 12, 1));
+        double valorTotalPagoSB = empresa.calcularValorPagoNoMes(LocalDate.of(2022, 1, 1), false);
+        double valorTotalPagoCB = empresa.calcularValorPagoNoMes(LocalDate.of(2022, 1, 1), true);
+        double valorPagoEmBeneficios = empresa.calcularValorTotalEmBeneficios(LocalDate.of(2022, 1, 1));
         Funcionario funcionarioMaisPagoSB = empresa.calcularMaiorSalarioSB(LocalDate.of(2020, 1, 1));
         Funcionario funcionarioMaisPagoCB = empresa.calcularMaiorBeneficio(LocalDate.of(2020, 1, 1));
         Funcionario vendedorMaisPago = empresa.calcularMelhorVendedor(LocalDate.of(2021, 12, 1));

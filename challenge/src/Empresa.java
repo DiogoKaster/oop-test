@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 public class Empresa {
     private Funcionario[] funcionarios;
@@ -50,8 +51,9 @@ public class Empresa {
     }
     public double calcularValorTotalEmBeneficios(LocalDate date) {
         double totalPago = 0;
+        Funcionario[] funcionariosCB = this.getFuncionariosCB();
 
-        for (Funcionario funcionario : this.funcionarios) {
+        for (Funcionario funcionario : funcionariosCB) {
             double beneficioPago = this.calculaBeneficio(funcionario, date);
             totalPago += beneficioPago;
         }
@@ -77,9 +79,10 @@ public class Empresa {
 
     public Funcionario calcularMaiorBeneficio(LocalDate date) {
         double maiorBeneficio = 0;
+        Funcionario[] funcionariosCB = this.getFuncionariosCB();
         Funcionario funcionarioMaisPago = null;
 
-        for (Funcionario funcionario : this.funcionarios) {
+        for (Funcionario funcionario : funcionariosCB) {
             double beneficioPago = this.calculaBeneficio(funcionario, date);
 
             if(beneficioPago > maiorBeneficio) {
@@ -165,6 +168,18 @@ public class Empresa {
         }
 
         return new Funcionario(nomeFuncionario, cargo, dateContratacao);
+    }
+
+    public Funcionario[] getFuncionariosCB() {
+        ArrayList<Funcionario> funcionariosCBList = new ArrayList<>();
+
+        for(Funcionario funcionario : this.funcionarios) {
+            if(funcionario.getCargo().getBonificacao() > 0) {
+                funcionariosCBList.add(funcionario);
+            }
+        }
+
+        return funcionariosCBList.toArray(new Funcionario[0]);
     }
 
     public void setFuncionarios(Funcionario[] funcionarios) {
