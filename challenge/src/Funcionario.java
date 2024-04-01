@@ -1,4 +1,5 @@
 import cargos.Cargo;
+import com.google.gson.JsonArray;
 
 import java.time.LocalDate;
 import java.time.Period;
