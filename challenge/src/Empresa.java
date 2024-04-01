@@ -52,21 +52,14 @@ public class Empresa {
         double totalPago = 0;
 
         for (Funcionario funcionario : this.funcionarios) {
-            double salarioFuncionario = 0;
-
-            if (funcionario.getCargo() instanceof Secretario) {
-                salarioFuncionario = funcionario.getSalarioRecebidoNoMes(date) * funcionario.getCargo().getBonificacao();
-            } else if (funcionario.getCargo() instanceof Vendedor) {
-                salarioFuncionario = ((Vendedor) funcionario.getCargo()).getBonificacaoNoMes(this.vendas, funcionario.getNome(), date);
-            }
-
-            totalPago += salarioFuncionario;
+            double beneficioPago = this.calculaBeneficio(funcionario, date);
+            totalPago += beneficioPago;
         }
 
         return totalPago;
     }
 
-    public Funcionario calcularValorMaisAltoMesSB(LocalDate date) {
+    public Funcionario calcularMaiorSalarioSB(LocalDate date) {
         double salarioMaisAlto = 0;
         Funcionario funcionarioMaisPago = null;
 
@@ -82,18 +75,16 @@ public class Empresa {
         return funcionarioMaisPago;
     }
 
-    public Funcionario calcularValorMaisAltoMesCB(LocalDate date) {
-        double salarioMaisAlto = 0;
+    public Funcionario calcularMaiorBeneficio(LocalDate date) {
+        double maiorBeneficio = 0;
         Funcionario funcionarioMaisPago = null;
 
         for (Funcionario funcionario : this.funcionarios) {
-            if (!(funcionario.getCargo() instanceof Gerente)) {
-                double salarioFuncionario = this.calculaSalario(funcionario, true, date);
+            double beneficioPago = this.calculaBeneficio(funcionario, date);
 
-                if(salarioFuncionario > salarioMaisAlto) {
-                    salarioMaisAlto = salarioFuncionario;
-                    funcionarioMaisPago = funcionario;
-                }
+            if(beneficioPago > maiorBeneficio) {
+                maiorBeneficio = beneficioPago;
+                funcionarioMaisPago = funcionario;
             }
         }
 
@@ -135,18 +126,22 @@ public class Empresa {
 
     public double calculaSalario(Funcionario funcionario, boolean comBeneficios, LocalDate date) {
         if (comBeneficios) {
-            if(funcionario.getCargo() instanceof Secretario) {
-                double salarioSecretario = funcionario.getSalarioRecebidoNoMes(date);
-                return salarioSecretario + (salarioSecretario * funcionario.getCargo().getBonificacao());
-            } else if (funcionario.getCargo() instanceof Vendedor) {
-                double bonificacaoVendedor = ((Vendedor) funcionario.getCargo()).getBonificacaoNoMes(this.vendas, funcionario.getNome(), date);
-                return bonificacaoVendedor + funcionario.getSalarioRecebidoNoMes(date);
-            } else {
-                return funcionario.getSalarioRecebidoNoMes(date);
-            }
+            return funcionario.getSalarioRecebidoNoMes(date) + calculaBeneficio(funcionario, date);
         } else {
             return funcionario.getSalarioRecebidoNoMes(date);
         }
+    }
+
+    public double calculaBeneficio(Funcionario funcionario, LocalDate date) {
+        double salarioFuncionario = 0;
+
+        if (funcionario.getCargo() instanceof Secretario) {
+            salarioFuncionario = funcionario.getSalarioRecebidoNoMes(date) * funcionario.getCargo().getBonificacao();
+        } else if (funcionario.getCargo() instanceof Vendedor) {
+            salarioFuncionario = ((Vendedor) funcionario.getCargo()).getBonificacaoNoMes(this.vendas, funcionario.getNome(), date);
+        }
+
+        return salarioFuncionario;
     }
 
     private static Funcionario setFuncionarioObj(String cargoFuncionario, String nomeFuncionario, String contratacao) {
